@@ -1,4 +1,4 @@
-const aiService = require("../services/ai.service")
+const aiService = require("./ai.service")
 
 
 module.exports.getReview = async(req, res) => {
@@ -11,4 +11,5 @@ module.exports.getReview = async(req, res) => {
 
     const response = await aiService(code);
     res.send(response);
+
 }
