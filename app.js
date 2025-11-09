@@ -1,5 +1,5 @@
 const express = require('express');
-const aiRoutes = require('./routes/ai.routes');
+const aiRoutes = require('./src/routes/ai.routes');
 const cors = require('cors');
 
 const app = express();
@@ -11,5 +11,6 @@ app.get('/', (req, res) => {
     res.send('padhle padh sale');
 });
 app.use('/ai', aiRoutes);
+
 
 module.exports = app;
