@@ -1,25 +1,55 @@
-const express = require("express");
-const cors = require("cors");
-const aiRoutes = require("./ai.routes");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import fetch from "node-fetch";
 
+dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
-// ✅ Allow only your final frontend domain
-app.use(cors({
-  origin: "https://code-review-frontend.pages.dev"
-}));
+// ✅ Allowed frontend URL (change yahan karna ho to kar)
+const allowedOrigins = [
+  "https://code-review-frontend.pages.dev",
+  "https://02dcdf4a.code-review-frontend.pages.dev",
+  "http://localhost:5173"
+];
 
-// ✅ Middleware
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS blocked for origin: " + origin));
+      }
+    },
+  })
+);
+
 app.use(express.json());
 
-// ✅ Routes
-app.use("/ai", aiRoutes);
-
-// ✅ Start server
-app.listen(PORT, () => {
-  console.log(`✅ Server is running on http://localhost:${PORT}`);
+// ✅ Base route to check if backend running
+app.get("/", (req, res) => {
+  res.send("✅ Backend is live and working!");
 });
 
+// ✅ Main route to get AI code review
+app.post("/ai/get-review", async (req, res) => {
+  try {
+    const { code } = req.body;
+    if (!code) return res.status(400).json({ error: "No code provided" });
 
+    // 👇 Your AI logic (for now, just dummy response)
+    const review = Here's a quick review of your code:\n\n✅ Logic looks fine.\n⚙ You can improve by adding error handling.;
 
+    res.json({ review });
+  } catch (error) {
+    console.error("❌ Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// ✅ Start server
+app.listen(port, () => {
+  console.log(`🚀 Server running on port ${port}`);
+});
