@@ -1,5 +1,6 @@
 // ai.services.js
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 
 // Initialize Gemini Model
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY);
@@ -98,3 +99,4 @@ async function aiService(code) {
 
 
 export default aiService;
+
