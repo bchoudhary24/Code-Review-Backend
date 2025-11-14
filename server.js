@@ -1,17 +1,17 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import fetch from "node-fetch";
+import { reviewCode } from "./ai.services.js";  // <-- IMPORTANT
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// ✅ Allowed frontend URL (change yahan karna ho to kar)
+// Allowed frontend URLs
 const allowedOrigins = [
   "https://code-review-frontend.pages.dev",
   "https://02dcdf4a.code-review-frontend.pages.dev",
-  "http://localhost:5173"
+  "http://localhost:5173",
 ];
 
 app.use(
@@ -28,29 +28,30 @@ app.use(
 
 app.use(express.json());
 
-// ✅ Base route to check if backend running
+// Base route
 app.get("/", (req, res) => {
   res.send("✅ Backend is live and working!");
 });
 
-// ✅ Main route to get AI code review
+// ⭐ AI CODE REVIEW ROUTE ⭐
 app.post("/ai/get-review", async (req, res) => {
   try {
     const { code } = req.body;
-    if (!code) return res.status(400).json({ error: "No code provided" });
 
-    // 👇 Your AI logic (for now, just dummy response)
-    const review = `Here's a quick review of your code:\n\n✅ Logic looks fine.\n⚙ You can improve by adding error handling.`;
+    if (!code)
+      return res.status(400).json({ error: "No code provided" });
+
+    // 🔥 REAL AI REVIEW CALL
+    const review = await reviewCode(code);
 
     res.json({ review });
   } catch (error) {
-    console.error("❌ Error:", error);
+    console.error("❌ Server Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// ✅ Start server
+// Start server
 app.listen(port, () => {
   console.log(`🚀 Server running on port ${port}`);
 });
-
