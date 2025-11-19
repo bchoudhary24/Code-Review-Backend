@@ -1,12 +1,10 @@
 // ai.services.js
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-
 // Initialize Gemini Model
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY);
 const model = genAI.getGenerativeModel({
     model: "gemini-2.0-flash",
-
 
     // SYSTEM INSTRUCTIONS FOR AI CODE REVIEWER
     systemInstruction: `Here's a solid system instruction for your AI code reviewer:
@@ -75,28 +73,22 @@ Output Example:
 • Returns null instead of breaking execution.
 
 Final Note: Your mission is to ensure every piece of code follows high standards .
- Your revoiew Would you like any adjustments based on your specific needs?
+ Your review Would you like any adjustments based on your specific needs?
  `
 });
-/*async function generateContent(prompt) {
-    const result = await model.generateContent(prompt);
 
-    return result.response.text();
-}
-module.exports = generateContent
-*/
-async function aiService(code) {
+// MAIN Code review function
+async function reviewCode(code) {
     try {
         console.log("📜 Received code for review:", code);
 
         const result = await model.generateContent(code);
         return result.response.text();
     } catch (err) {
-        console.error("❌ Error inside aiService:", err);
-        throw err; // Pass error back to controller
+        console.error("❌ Error inside reviewCode:", err);
+        throw err;
     }
 }
 
-
-export default aiService;
-
+// ⭐ Correct ESM export
+export { reviewCode };
