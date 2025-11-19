@@ -77,12 +77,20 @@ Final Note: Your mission is to ensure every piece of code follows high standards
  `
 });
 
-// MAIN Code review function
+// ⭐ MAIN FUNCTION → FIXED generateContent FORMAT
 async function reviewCode(code) {
     try {
         console.log("📜 Received code for review:", code);
 
-        const result = await model.generateContent(code);
+        const result = await model.generateContent({
+            contents: [
+                {
+                    role: "user",
+                    parts: [{ text: code }]
+                }
+            ]
+        });
+
         return result.response.text();
     } catch (err) {
         console.error("❌ Error inside reviewCode:", err);
@@ -90,5 +98,6 @@ async function reviewCode(code) {
     }
 }
 
-// ⭐ Correct ESM export
+// ⭐ EXPORT FIXED (ESM STYLE)
 export { reviewCode };
+
